@@ -34,5 +34,6 @@ _testmain.go
 ## Directory-based project format:
 .idea/
 
+/VERSION
 /devops-demo-app
 
