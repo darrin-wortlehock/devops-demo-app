@@ -1,0 +1,14 @@
+description     "Devops Demo Application"
+author          "Darrin Wortlehock"
+
+start on net-device-up
+stop on runlevel [016]
+
+respawn
+umask 022
+chdir /
+setuid nobody
+setgid nogroup
+console log # log stdout/stderr to /var/log/upstart/
+
+exec /usr/bin/devops-demo-app
