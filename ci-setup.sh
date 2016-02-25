@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -e
 export GOPATH=$HOME/golang
 mkdir -p $GOPATH
 go get github.com/stretchr/testify/assert
