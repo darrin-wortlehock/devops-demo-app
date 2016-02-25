@@ -11,15 +11,29 @@ FPM::RakeTask.new(:package, { source: :dir, target: :deb, directory: '.'}) do |d
   deb.deb_no_default_config_files = false
 end
 
+def version
+  sh('scmversion current')
+  IO.read(File.join(File.dirname(__FILE__), 'VERSION')) rescue 'unknown'
+end
+
 task :prepare do
   mkdir 'build'
   mkdir 'dist'
 end
 
-task :build do
-  puts 'build the golang code'
-  sh('go build -o build/devops-demo-app')
+desc 'build the golang app'
+task :build => [:clean, :prepare, :test, :bump] do
+  sh("go build -ldflags '-X main.Build=#{version}' -o build/devops-demo-app")
+end
+
+desc 'test the golang app'
+task :test do
+  sh('go test')
+end
+
+task :bump do
+  sh('scmversion bump auto')
 end
 
 desc 'create deb package'
-task :package => [:clean, :prepare, :build]
+task :package => [:clean, :prepare, :test, :bump, :build]
